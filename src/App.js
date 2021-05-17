@@ -8,6 +8,7 @@ import nanoid from 'nanoid/non-secure';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
+  Alert,
   AppRegistry,
   AppState,
   Linking,
@@ -108,6 +109,17 @@ class App extends Component {
   state = { appState: AppState.currentState, initialRoute: null };
 
   async componentDidMount() {
+    //Check status of app
+    // if is not correct verion installed or
+    // maintentanceMode is turned on
+    const correctVersion = true;
+    const isMaintenanceMode = this.maintenanceMode();
+
+    console.log('MAINTENANCEMODE', isMaintenanceMode);
+    // if (correctVersion) {
+    //   Alert.alert('hello');
+    // }
+
     if (!__DEV__ && NativeModules.RNTestFlight) {
       const { isTestFlight } = NativeModules.RNTestFlight.getConstants();
       logger.sentry(`Test flight usage - ${isTestFlight}`);
@@ -188,6 +200,42 @@ class App extends Component {
     this.backgroundNotificationHandler?.();
     this.branchListener?.();
   }
+
+  // Example POST method implementation:
+  postData = async (url = '', data = {}) => {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: 'GET', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // body: JSON.stringify(data), // body data type must match "Content-Type" header
+    });
+
+    return response.json(); // parses JSON response into native JavaScript objects
+  };
+
+  // /**
+  //  * @desc Checks if a an address has previous transactions
+  //  * @param  {String} address
+  //  * @return {Promise<Boolean>}
+  //  */
+
+  maintenanceMode = async () => {
+    const url = `https://us-central1-card-pay-3e9be.cloudfunctions.net/maintenance-status`;
+
+    try {
+      const response = await this.postData(url);
+
+      console.log('--------------------', response);
+
+      Alert.alert('request', response.status);
+      return true;
+    } catch (e) {
+      console.log('ERROR', e);
+      return false;
+    }
+  };
 
   identifyFlow = async () => {
     const address = await loadAddress();
