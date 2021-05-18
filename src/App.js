@@ -8,7 +8,6 @@ import nanoid from 'nanoid/non-secure';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
-  Alert,
   AppRegistry,
   AppState,
   Linking,
@@ -113,19 +112,18 @@ class App extends Component {
     // if is not correct verion installed or
     // maintentanceMode is turned on
     const correctVersion = true;
-    const isMaintenanceMode = this.maintenanceMode();
-
-    console.log('MAINTENANCEMODE', isMaintenanceMode);
-    // if (correctVersion) {
-    //   Alert.alert('hello');
-    // }
 
     if (!__DEV__ && NativeModules.RNTestFlight) {
       const { isTestFlight } = NativeModules.RNTestFlight.getConstants();
       logger.sentry(`Test flight usage - ${isTestFlight}`);
     }
     this.identifyFlow();
+
+    if (__DEV__) {
+      this.maintenanceStatus();
+    }
     AppState.addEventListener('change', this.handleAppStateChange);
+
     await this.handleInitializeAnalytics();
     saveFCMToken();
     this.onTokenRefreshListener = registerTokenRefreshListener();
@@ -201,18 +199,10 @@ class App extends Component {
     this.branchListener?.();
   }
 
-  // Example POST method implementation:
-  postData = async (url = '', data = {}) => {
-    // Default options are marked with *
-    const response = await fetch(url, {
-      method: 'GET', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // body: JSON.stringify(data), // body data type must match "Content-Type" header
-    });
+  postData = async (url = '') => {
+    const response = await fetch(url);
 
-    return response.json(); // parses JSON response into native JavaScript objects
+    return response.json();
   };
 
   // /**
@@ -221,15 +211,17 @@ class App extends Component {
   //  * @return {Promise<Boolean>}
   //  */
 
-  maintenanceMode = async () => {
+  maintenanceStatus = async () => {
     const url = `https://us-central1-card-pay-3e9be.cloudfunctions.net/maintenance-status`;
 
     try {
       const response = await this.postData(url);
 
-      console.log('--------------------', response);
-
-      Alert.alert('request', response.status);
+      if (response.data.value) {
+        // Alert.alert('Maintenance mode', `${response.data.value}`);
+        console.log('navigation', Navigation);
+        Navigation.handleAction(Routes.MAINTENANCE_MODAL, { single: true });
+      }
       return true;
     } catch (e) {
       console.log('ERROR', e);

@@ -12,6 +12,7 @@ import ChangeWalletSheet from '../screens/ChangeWalletSheet';
 import DepositModal from '../screens/DepositModal';
 import ExpandedAssetSheet from '../screens/ExpandedAssetSheet';
 import ImportSeedPhraseSheet from '../screens/ImportSeedPhraseSheet';
+import MaintenanceModal from '../screens/MaintenanceModal';
 import ModalScreen from '../screens/ModalScreen';
 import ReceiveModal from '../screens/ReceiveModal';
 import RestoreSheet from '../screens/RestoreSheet';
@@ -238,6 +239,21 @@ function NativeStackNavigator() {
           customStack: true,
           ignoreBottomOffset: true,
           topOffset: 0,
+        }}
+      />
+      <NativeStack.Screen
+        component={MaintenanceModal}
+        name={Routes.MAINTENANCE_MODAL}
+        options={{
+          backgroundColor: '#25292E',
+          backgroundOpacity: 0.7,
+          cornerRadius: 0,
+          customStack: true,
+          ignoreBottomOffset: true,
+          topOffset: 0,
+          allowsDragToDismiss: false,
+          allowTapToDismiss: false,
+          dismissable: false,
         }}
       />
       <NativeStack.Screen
