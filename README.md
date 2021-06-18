@@ -14,38 +14,38 @@
 * Install Watchman `brew install watchman`
 * Install the latest version of XCode: https://developer.apple.com/xcode/
 
-## How to run the project
+## How to setup the project
 
 If you are new to React Native, this is a helpful introduction: https://facebook.github.io/react-native/docs/getting-started.html
 
 1. Clone the GitHub repository to your machine.
 
-1. Run `nvm use 14` to use set the version of node for this project.
+2. Run `nvm use 14` to use set the version of node for this project.
 
-1. Set up your .env file, use our env.example as a guide.
+4. Run `yarn setup` to get all of the packages required and [setup environment variables](#environment-variables)
 
-    ___Note that some features are currently not accessible, we are working with our Data Providers in order to provide open source API Keys!___
+5. Run `yarn install-bundle`.
 
-    Here are some resources to generate your own API keys:
+6. Install required Pods by running `yarn install-pods`.
 
-    * Etherscan: https://etherscan.io/apis
-    * Infura: https://infura.io/
-    * ETH Gas Station: https://docs.ethgasstation.info/
-    * Imgix: https://www.imgix.com/
+6. Run `yarn build:ios` to generate the main.jsbundle bundle for Xcode.
 
-1. Run `yarn setup` to get all of the packages required.
+## Environment Variables
+### Setup
+This project utilizes [https://github.com/cardstack/cardwallet-context](https://github.com/cardstack/cardwallet-context) to manage our environment variables via fastlane. Setup is handled in the `yarn setup` script mentioned above.  
 
-1. Run `yarn install-bundle`.
+**NOTE: Please keep in mind, dotenv files should never be checked into this repo**.
 
-1. Install required Pods by running `yarn install-pods`.
-
-1. Run `yarn build:ios` to generate the main.jsbundle bundle for Xcode.
+### Updating
+To update a dotenv file, you will need to publish and sync it back to the [https://github.com/cardstack/cardwallet-context](https://github.com/cardstack/cardwallet-context). To do so, update the dotenv file directly in this project. When ready, `yarn contexts:app:publish` and `yarn contexts:app:sync` (ensuring it's up to date with the context repo).
    
+### Running the app
+
 1. Run `yarn start` to start the React Native Bundler.
 
-1. Open `rainbow-wallet/ios/RainbowWallet.xcworkspace` in XCode.
-
-1. Run the project by clicking the play button.
+2. To build the project, you can either
+    a. In the terminal, run `yarn ios`
+    b. Open `rainbow-wallet/ios/RainbowWallet.xcworkspace` in XCode and run the project by clicking the play button.
 
 ## CodePush
 
