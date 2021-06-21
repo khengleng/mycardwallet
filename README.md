@@ -37,7 +37,7 @@ This project utilizes [https://github.com/cardstack/cardwallet-context](https://
 **NOTE: Please keep in mind, dotenv files should never be checked into this repo**.
 
 ### Updating
-To update a dotenv file, you will need to publish and sync it back to the [https://github.com/cardstack/cardwallet-context](https://github.com/cardstack/cardwallet-context). To do so, update the dotenv file directly in this project. When ready, `yarn contexts:app:publish` and `yarn contexts:app:sync` (ensuring it's up to date with the context repo).
+To update a dotenv file, you will need to publish and sync it back to the [https://github.com/cardstack/cardwallet-context](https://github.com/cardstack/cardwallet-context). To do so, update the dotenv file directly in this project. When ready, `yarn contexts:app:publish` and `yarn contexts:app:sync` (ensuring it's up to date with the context repo). NOTE: This will publish and sync local environment variables only, you can update/sync tartgeted environment variables like so, `yarn contexts:app:[alpha | beta | release]:[sync | publish]`.
    
 ### Running the app
 
