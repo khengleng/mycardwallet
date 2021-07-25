@@ -26,7 +26,7 @@ const ProfileScreenPage = styled(Page)`
   flex: 1;
 `;
 
-export default function ProfileScreen({ navigation }) {
+export default function ProfileScreen() {
   const [activityListInitialized, setActivityListInitialized] = useState(false);
   const isFocused = useIsFocused();
   const { navigate } = useNavigation();
@@ -38,7 +38,6 @@ export default function ProfileScreen({ navigation }) {
   const {
     isLoadingTransactions: isLoading,
     sections,
-
     transactionsCount,
   } = accountTransactions;
   const { pendingRequestCount } = useRequests();
