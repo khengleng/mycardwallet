@@ -16,6 +16,7 @@ import { useRainbowSelector } from '@rainbow-me/redux/hooks';
 import { useWallets } from '@rainbow-me/hooks';
 import Web3Instance from '@cardstack/models/web3-instance';
 import HDProvider from '@cardstack/models/hd-provider';
+import { INITIAL_STATE } from '@rainbow-me/redux/settings';
 
 interface RouteType {
   params: {
@@ -39,7 +40,7 @@ export const usePaymentMerchantUniversalLink = () => {
 
   const networkName: Network = ['sokol', 'xdai'].includes(network)
     ? network
-    : Network.sokol;
+    : INITIAL_STATE.network;
 
   const currencyName = currency || 'SPD';
 

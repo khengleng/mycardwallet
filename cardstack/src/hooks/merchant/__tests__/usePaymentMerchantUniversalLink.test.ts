@@ -46,6 +46,10 @@ jest.mock('@cardstack/utils', () => ({
   deviceUtils: { isIOS14: false },
 }));
 
+jest.mock('@rainbow-me/redux/settings', () => ({
+  INITIAL_STATE: { network: 'sokol' },
+}));
+
 jest.mock('@cardstack/models/web3-instance', () => ({
   Web3Instance: () => ({
     get: jest.fn(),
