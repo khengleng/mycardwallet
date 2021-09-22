@@ -27,7 +27,6 @@ const AndroidBackground = styled.View`
 
 const Content = styled(Animated.ScrollView).attrs(({ y }) => ({
   directionalLockEnabled: true,
-  keyboardShouldPersistTaps: 'always',
   onScroll: event([
     {
       nativeEvent: {
@@ -151,6 +150,7 @@ export default function SlackSheet({
             contentHeight={contentHeight}
             deviceHeight={deviceHeight}
             directionalLockEnabled
+            keyboardShouldPersistTaps="handled"
             ref={sheet}
             scrollEnabled={scrollEnabled}
             scrollIndicatorInsets={scrollIndicatorInsets}
