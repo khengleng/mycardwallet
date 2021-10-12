@@ -48,7 +48,11 @@ export const usePayMerchant = () => {
     data,
   } = usePaymentMerchantUniversalLink();
 
-  const { paymentChangeCurrency } = usePayment();
+  const {
+    paymentChangeCurrency,
+    paymentProcessStart,
+    paymentProcessDone,
+  } = usePayment();
 
   const { infoDID = '', amount: initialAmount, currency } = data;
 
@@ -120,6 +124,8 @@ export const usePayMerchant = () => {
 
       const timestamp = await getBlockTimestamp(receipt.blockNumber);
 
+      paymentProcessDone();
+
       if (canGoBack()) {
         goBack();
       }
@@ -148,6 +154,7 @@ export const usePayMerchant = () => {
       inputValue,
       merchantInfoDID,
       navigate,
+      paymentProcessDone,
       selectedPrepaidCard,
       spendAmount,
     ]
@@ -159,7 +166,18 @@ export const usePayMerchant = () => {
       selectedPrepaidCard?.address || '',
       onPayMerchantSuccess
     );
-  }, [onConfirm, spendAmount, selectedPrepaidCard, onPayMerchantSuccess]);
+
+    paymentProcessStart(
+      'Processing Transaction',
+      `This will take approximately\n10-15 seconds`
+    );
+  }, [
+    paymentProcessStart,
+    onConfirm,
+    spendAmount,
+    selectedPrepaidCard,
+    onPayMerchantSuccess,
+  ]);
 
   const onSelectPrepaidCard = useCallback(
     (prepaidCardItem: PrepaidCardType) => {
