@@ -2,9 +2,10 @@ import React from 'react';
 import { Container, CenteredContainer, Text } from '@cardstack/components';
 import { Device } from '@cardstack/utils';
 import { colors } from '@cardstack/theme';
-import ActivityIndicator from '@rainbow-me/components/ActivityIndicator';
 import Spinner from '@rainbow-me/components/Spinner';
 import { neverRerender } from '@rainbow-me/utils';
+import { useRoute } from '@react-navigation/core';
+import { ActivityIndicator } from 'react-native';
 
 const OverlyStyle = {
   shadowOffset: {
@@ -20,14 +21,11 @@ const OverlyStyle = {
   borderRadius: 20,
 };
 
-const LoadingOverlay = ({
-  title,
-  subTitle,
-  ...props
-}: {
-  title?: string;
-  subTitle?: string;
-}) => {
+const LoadingOverlay = props => {
+  const {
+    params: { title, subTitle },
+  } = useRoute();
+
   return (
     <Container flex={1} justifyContent="center" alignItems="center" {...props}>
       <CenteredContainer

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { TransactionReceipt } from 'web3-eth';
 import { LayoutAnimation, InteractionManager } from 'react-native';
 import { NativeCurrency } from '@cardstack/cardpay-sdk/sdk/currencies';
+import { StackActions } from '@react-navigation/routers';
 import { getBlockTimestamp, mapPrepaidTxToNavigationParams } from './helpers';
 import usePayment from '@cardstack/redux/hooks/usePayment';
 import { usePaymentMerchantUniversalLink } from '@cardstack/hooks/merchant/usePaymentMerchantUniversalLink';
@@ -38,7 +39,7 @@ const layoutAnimation = () => {
 };
 
 export const usePayMerchant = () => {
-  const { navigate, goBack, canGoBack } = useNavigation();
+  const { navigate, canGoBack, dispatch } = useNavigation();
 
   const {
     prepaidCards,
@@ -48,11 +49,7 @@ export const usePayMerchant = () => {
     data,
   } = usePaymentMerchantUniversalLink();
 
-  const {
-    paymentChangeCurrency,
-    paymentProcessStart,
-    paymentProcessDone,
-  } = usePayment();
+  const { paymentChangeCurrency } = usePayment();
 
   const { infoDID = '', amount: initialAmount, currency } = data;
 
@@ -124,10 +121,8 @@ export const usePayMerchant = () => {
 
       const timestamp = await getBlockTimestamp(receipt.blockNumber);
 
-      paymentProcessDone();
-
       if (canGoBack()) {
-        goBack();
+        dispatch(StackActions.popToTop());
       }
 
       // Wait goBack action to navigate
@@ -150,11 +145,10 @@ export const usePayMerchant = () => {
       accountCurrency,
       canGoBack,
       currencyConversionRates,
-      goBack,
+      dispatch,
       inputValue,
       merchantInfoDID,
       navigate,
-      paymentProcessDone,
       selectedPrepaidCard,
       spendAmount,
     ]
@@ -166,18 +160,7 @@ export const usePayMerchant = () => {
       selectedPrepaidCard?.address || '',
       onPayMerchantSuccess
     );
-
-    paymentProcessStart(
-      'Processing Transaction',
-      `This will take approximately\n10-15 seconds`
-    );
-  }, [
-    paymentProcessStart,
-    onConfirm,
-    spendAmount,
-    selectedPrepaidCard,
-    onPayMerchantSuccess,
-  ]);
+  }, [onConfirm, spendAmount, selectedPrepaidCard, onPayMerchantSuccess]);
 
   const onSelectPrepaidCard = useCallback(
     (prepaidCardItem: PrepaidCardType) => {
