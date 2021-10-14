@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { TransactionReceipt } from 'web3-eth';
 import { LayoutAnimation, InteractionManager } from 'react-native';
 import { NativeCurrency } from '@cardstack/cardpay-sdk/sdk/currencies';
-import { StackActions } from '@react-navigation/routers';
 import { getBlockTimestamp, mapPrepaidTxToNavigationParams } from './helpers';
 import usePayment from '@cardstack/redux/hooks/usePayment';
 import { usePaymentMerchantUniversalLink } from '@cardstack/hooks/merchant/usePaymentMerchantUniversalLink';
@@ -19,6 +18,7 @@ import {
 } from '@rainbow-me/redux/hooks';
 import { useNavigation } from '@rainbow-me/navigation';
 import RainbowRoutes from '@rainbow-me/navigation/routesNames';
+import { useLoadingOverlay } from '@cardstack/navigation';
 
 export const PAY_STEP = {
   EDIT_AMOUNT: 'EDIT_AMOUNT',
@@ -39,7 +39,8 @@ const layoutAnimation = () => {
 };
 
 export const usePayMerchant = () => {
-  const { navigate, canGoBack, dispatch } = useNavigation();
+  const { navigate, canGoBack, goBack } = useNavigation();
+  const { dismissLoadingOverlay } = useLoadingOverlay();
 
   const {
     prepaidCards,
@@ -121,8 +122,11 @@ export const usePayMerchant = () => {
 
       const timestamp = await getBlockTimestamp(receipt.blockNumber);
 
+      dismissLoadingOverlay();
+
+      // Dismisses PayMerchantModal
       if (canGoBack()) {
-        dispatch(StackActions.popToTop());
+        goBack();
       }
 
       // Wait goBack action to navigate
@@ -145,7 +149,8 @@ export const usePayMerchant = () => {
       accountCurrency,
       canGoBack,
       currencyConversionRates,
-      dispatch,
+      dismissLoadingOverlay,
+      goBack,
       inputValue,
       merchantInfoDID,
       navigate,
