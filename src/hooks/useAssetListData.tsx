@@ -157,6 +157,7 @@ const safesInitialState = {
 export const useAssetListData = () => {
   const [nativeCurrency] = useNativeCurrencyAndConversionRates();
   const { network, accountAddress } = useAccountSettings();
+  const walletReady = useRainbowSelector(state => state.appState.walletReady);
 
   const {
     isFetching: isFetchingSafes,
@@ -166,7 +167,7 @@ export const useAssetListData = () => {
   } = useGetSafesDataQuery(
     { address: accountAddress, nativeCurrency },
     {
-      skip: isLayer1(network) || !accountAddress,
+      skip: isLayer1(network) || !accountAddress || !walletReady,
     }
   );
 
